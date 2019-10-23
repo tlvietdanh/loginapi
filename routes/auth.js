@@ -7,21 +7,44 @@ require('../passport');
 
 
 router.post('/register', function (req, res, next) {
-    userModal.create(req.body)
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
+    // validate username
+    userModal.findOne({
+        where: {
+            username: req.body.username,
+        }
+    }).then(data1 => {
+        if (!data1) {
+            userModal.create(req.body)
+                .then(data => {
+                    user = {
+                        id: data.id,
+                        username: data.username,
+                        firstname: data.firstname,
+                        lastname: data.lastname
+                    }
+                    res.send(user);
+                })
+                .catch(err => {
+                    res.status(400)
+                    res.send(err);
+                })
+        }
+        else {
+            res.send('The username has already been taken');
+        }
+    }).catch(err => {
             res.status(400)
             res.send(err);
-        })
+    })
+
+    
 });
 
 /* POST login. */
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err || !user) {
-            return res.status(400).json({
+            return res.status(200).json({
                 message: 'Something is not right',
                 user: user
             

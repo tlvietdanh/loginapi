@@ -12,7 +12,6 @@ passport.use(new LocalStrategy({
         password: 'password'
     },
     function (username, password, cb) {
-        console.log(username)
         //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
         return UserModel.findOne({
                 where: {
@@ -21,9 +20,6 @@ passport.use(new LocalStrategy({
                 }
             })
             .then(user => {
-                console.log("user")
-
-                console.log(user)
                 if (!user) {
                     return cb(true, null, {
                         message: 'Incorrect username or password.'

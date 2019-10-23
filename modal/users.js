@@ -9,9 +9,15 @@ module.exports = db.sequelize.define(
             autoIncrement: true
         },
         username: {
-            type: Sequelize.STRING
+            type: Sequelize.STRING,
         },
         password: {
+            type: Sequelize.STRING
+        },
+        firstname: {
+            type: Sequelize.STRING
+        },
+        lastname: {
             type: Sequelize.STRING
         }
     }, 

@@ -20,6 +20,9 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+const io = require('socket.io')(server);
+require('../server')(io);
+
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -32,6 +35,8 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
+
+
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -88,3 +93,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+module.exports = io;

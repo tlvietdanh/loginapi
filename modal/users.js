@@ -14,14 +14,16 @@ module.exports = db.sequelize.define(
         password: {
             type: Sequelize.STRING
         },
-        firstname: {
+        email: {
             type: Sequelize.STRING
         },
-        lastname: {
+        fullname: {
+            type: Sequelize.STRING
+        },
+        avatar: {
             type: Sequelize.STRING
         }
-    }, 
-    {
+    }, {
         timestamps: false
     }
 )

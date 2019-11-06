@@ -16,15 +16,37 @@ router.post('/register', function (req, res, next) {
         if (!data1) {
             userModal.create(req.body)
                 .then(data => {
+                    console.log(data.id);
                     user = {
                         id: data.id,
                         username: data.username,
-                        firstname: data.firstname,
-                        lastname: data.lastname
+                        password: data.password,
+                        email: data.email,
+                        fullname: data.fullname,
+                        avatar: data.avatar
                     }
-                    res.send(user);
+                    passport.authenticate('local', { session: false }, (err, user, info) => {
+                        if (err || !user) {
+                            return res.status(200).json({
+                                message: 'Invalid username or password',
+                                user: user
+                            });
+                        }
+                        req.login(user, {session: false}, (err) => {
+                            if (err) {
+                                res.send(err);
+                            }                
+                            // generate a signed son web token with the contents of user object and return it in the response
+                            const token = jwt.sign(user, 'homnaylamotngaydeptroivatoiphaingoilamdealine');
+                            return res.json({
+                                user,
+                                token
+                            });
+                        });
+                    })(req, res, next);
                 })
                 .catch(err => {
+                    console.log(err);
                     res.status(400)
                     res.send(err);
                 })
@@ -36,8 +58,6 @@ router.post('/register', function (req, res, next) {
             res.status(400)
             res.send(err);
     })
-
-    
 });
 
 /* POST login. */
@@ -54,6 +74,8 @@ router.post('/login', function (req, res, next) {
             if (err) {
                 res.send(err);
             }
+            console.log('awdadawd');
+
             // generate a signed son web token with the contents of user object and return it in the response
             const token = jwt.sign(user, 'homnaylamotngaydeptroivatoiphaingoilamdealine');
             return res.json({
